@@ -1,8 +1,7 @@
-# Pyre type checker
-.pyre/
 .DS_Store
-.pyc
 embeddings/*
 models/*
 data/*
+*.pyc
+*__pycache__/
 
