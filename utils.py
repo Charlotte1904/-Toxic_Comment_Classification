@@ -56,6 +56,6 @@ class Timer:
         if elapsed_time < 100: 
             print(f"{self.start_job_name} takes {elapsed_time:0.2f} seconds")
         else:
-            print(f"{self.start_job_name} takes {elapsed_time/60:0.2f} seconds")
+            print(f"{self.start_job_name} takes {elapsed_time/60:0.2f} minutes")
 
         self._start_time = None
