@@ -1,7 +1,4 @@
 .DS_Store
-embeddings/*
-models/*
-data/*
 *.pyc
 *__pycache__/
 
