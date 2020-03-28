@@ -120,6 +120,7 @@ if __name__ == "__main__":
     TRANSFORMED_TEST_DATA_FILE = os.path.join(DATA_DIR, "transformed_test.csv")
 
     ## Load data
+    print("Loading the data")
     train_df = pd.read_csv(TRAIN_DATA_FILE)
     test_df = pd.read_csv(TEST_DATA_FILE)
 
