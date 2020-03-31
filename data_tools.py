@@ -26,6 +26,7 @@ def generate_stratified_train_val_test(df):
         labels_idx_dict[f"combo_2_toxic_and_{label_name}"] = df[(df["toxic_count"] == 2) & (df[label_name] == 1) & (df["toxic"] == 1)].sample(frac=1,random_state=9).index
 
     ## 
+    over_sampling_group_list = ["combo_6_toxic", "combo_2_obscene_and_insult", "combo_2_hate_and_insult", "combo_3_obscene_and_insult", "combo_2_toxic_and_severe_toxic", "combo_2_toxic_and_obscene", "combo_2_toxic_and_threat", "combo_2_toxic_and_insult", "combo_2_toxic_and_identity_hate", "combo_4_wo_threat"]
     train_indices, val_indices, test_indices, total_index_list = [], [], [], []
     for key_name, index_list in labels_idx_dict.items():
         print(f"{key_name.ljust(40,' ' )} {len(index_list)}")
@@ -33,15 +34,7 @@ def generate_stratified_train_val_test(df):
         ## Calculate size of dataset
         data_size = len(index_list)
         train_size, val_size, test_size = get_train_val_test_sizes(data_size)
-
-        train_portion = index_list[:train_size]
-        val_portion = index_list[train_size:train_size+val_size]
-        test_portion = index_list[-test_size:]
-
-        print(f"{key_name.ljust(40,' ' )} train {len(train_portion) == train_size} {len(train_portion)} {train_size}")
-        print(f"{key_name.ljust(40,' ' )} val {len(val_portion) == val_size} {len(val_portion)} {val_size}")
-        print(f"{key_name.ljust(40,' ' )} test {len(test_portion) == test_size} {len(test_portion)} {test_size}")
-
+        
         ## Append each portion 
         train_indices.extend(index_list[:train_size])
         val_indices.extend(index_list[train_size:train_size+val_size])
@@ -62,10 +55,39 @@ def generate_stratified_train_val_test(df):
     train_df = df[df.index.isin(train_indices)]
     val_df = df[df.index.isin(val_indices)]
     test_df = df[df.index.isin(test_indices)]
-    print(len(train_df),len(val_df),len(test_df))
+
+    assert(len(df) == len(train_df)+len(val_df)+len(test_df))
 
     return train_df, val_df, test_df
 
 if __name__ == "__main__":
-    train = pd.read_csv('data/transformed_train.csv')
+    data_csv_path = "data/transformed_train.csv"
+    train_csv_path = "data/transformed_train_set.csv"
+    val_csv_path = "data/transformed_val_set.csv"
+    test_csv_path = "data/transformed_test_set.csv"
+
+    train = pd.read_csv(data_csv_path)
+
     train_df, val_df, test_df = generate_stratified_train_val_test(train)
+
+    train_df.to_csv(train_csv_path)
+    val_df.to_csv(val_csv_path)
+    test_df.to_csv(test_csv_path)
+
+    """
+    clean                                    143346
+    combo_6_toxic                            31
+    toxic                                    5666
+    combo_2_obscene_and_insult               181
+    combo_2_hate_and_insult                  28
+    combo_3_obscene_and_insult               3820
+    combo_2_toxic_and_severe_toxic           41
+    combo_2_toxic_and_obscene                1758
+    combo_2_toxic_and_threat                 113
+    combo_2_toxic_and_insult                 1215
+    combo_2_toxic_and_identity_hate          136
+    combo_4_wo_threat                        1620
+    other remaining toxic                    1616
+
+    """
+
