@@ -45,7 +45,10 @@ class Timer:
         else:
             elapsed_time = time.perf_counter() - self._toc_time
             self._toc_time = time.perf_counter()
-        print(f"{toc_job_name} takes {elapsed_time:0.2f} seconds")
+        if elapsed_time < 100: 
+            print(f"{toc_job_name} takes {elapsed_time:0.2f} seconds")
+        else:
+            print(f"{toc_job_name} takes {elapsed_time/60:0.2f} minutes")
 
     def stop(self):
         """Stop the timer, and report the elapsed time"""
